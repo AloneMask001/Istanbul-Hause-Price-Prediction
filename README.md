@@ -1,3 +1,4 @@
+[README.md](https://github.com/user-attachments/files/28794784/README.md)
 <p align="center">
   <h1 align="center">🏠 Istanbul House Price Prediction</h1>
   <p align="center">
@@ -5,7 +6,7 @@
   </p>
   <p align="center">
     <img src="https://img.shields.io/badge/Python-3.8-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-    <img src="https://img.shields.io/badge/Scikit--Learn-ML-orange?style=for-the-badge&logo=scikit-learn&logoColor=white" alt="Scikit-learn">
+    <img src="https://img.shields.io/badge/XGBoost-ML-orange?style=for-the-badge&logo=xgboost&logoColor=white" alt="XGBoost">
     <img src="https://img.shields.io/badge/Pandas-Data-green?style=for-the-badge&logo=pandas&logoColor=white" alt="Pandas">
     <img src="https://img.shields.io/badge/Jupyter-Notebook-red?style=for-the-badge&logo=jupyter&logoColor=white" alt="Jupyter">
   </p>
@@ -15,7 +16,7 @@
 
 ## ✨ About The Project
 
-A machine learning project that analyzes **~2983 real estate listings** from Istanbul and builds a **Random Forest Regressor** model to predict house prices. The project covers the full data science pipeline — from data cleaning and feature engineering to model training and evaluation.
+A machine learning project that analyzes **~2983 real estate listings** from Istanbul and builds an **XGBoost Regressor** model to predict house prices. The project covers the full data science pipeline — from data cleaning and feature engineering to model training and evaluation.
 
 > 💡 **Key Insight:** The model performs significantly better on regular-priced homes. Error rates increase for extreme/luxury prices due to their rarity in the dataset.
 
@@ -31,9 +32,9 @@ A machine learning project that analyzes **~2983 real estate listings** from Ist
     <td align="center"><b>📍 Neighborhoods</b><br>210 neighborhoods</td>
   </tr>
   <tr>
-    <td align="center"><b>🤖 Model</b><br>Random Forest</td>
-    <td align="center"><b>📈 OOB Score</b><br>0.778</td>
-    <td align="center"><b>🎯 Test R²</b><br>0.611</td>
+    <td align="center"><b>🤖 Model</b><br>XGBoost</td>
+    <td align="center"><b>📈 CV R²</b><br>0.762</td>
+    <td align="center"><b>🎯 Test R²</b><br>0.763</td>
     <td align="center"><b>📐 Features</b><br>16 engineered</td>
   </tr>
 </table>
@@ -46,9 +47,9 @@ The model's accuracy varies across different price ranges. It performs **best on
 
 | Price Segment | Listing Count | MAE (TRY) | Accuracy |
 |:---:|:---:|:---:|:---:|
-| 🟢 **0 – 2M TRY** | 1,662 | Lower | ✅ Most Accurate |
-| 🟡 **2M – 10M TRY** | 1,012 | ~1.5M | ⚠️ Moderate |
-| 🔴 **10M+ TRY** | 226 | Higher | ❌ Less Accurate |
+| 🟢 **0 – 2M TRY** | 1,662 | ~317K | ✅ Most Accurate |
+| 🟡 **2M – 10M TRY** | 1,012 | ~1.6M | ⚠️ Moderate |
+| 🔴 **10M+ TRY** | 226 | ~8.2M | ❌ Less Accurate |
 
 > ⚠️ **Why do extreme prices have higher error rates?**  
 > Luxury properties (10M+ TRY) make up only **~8%** of the dataset. With so few samples, the model struggles to learn the unique pricing patterns of these properties — such as premium locations, special amenities, or architectural features that justify extreme prices.
@@ -57,10 +58,9 @@ The model's accuracy varies across different price ranges. It performs **best on
 
 | Metric | Value |
 |:---|:---:|
-| **OOB Score** (log prices) | `0.778` |
-| **Test Score** (log prices) | `0.781` |
-| **R² Score** (actual prices) | `0.611` |
-| **RMSE** | `~3.1M TRY` |
+| **CV R²** (log prices) | `0.762` |
+| **Test R²** (log prices) | `0.763` |
+| **R² Score** (actual prices) | `0.613` |
 | **MAE** | `~1.26M TRY` |
 
 ---
@@ -70,17 +70,17 @@ The model's accuracy varies across different price ranges. It performs **best on
 The features that matter most when predicting house prices:
 
 ```
-İlçe_Mahalle_target  ████████████████████████████  26.7%  📍 Location
-Yaşam_endeksi        ███████████████████           19.0%  🏘️ Living Index
-Net_Metrekare        ██████████████████            15.4%  📐 Area (m²)
-Nüfus                █████████                      8.7%  👥 Population
-Banyo_Sayısı         ████████                       8.2%  🚿 Bathrooms
-Oda_Sayısı           ██████                         6.0%  🚪 Rooms
-Binanın_Kat_Sayısı   ████                           4.4%  🏗️ Total Floors
-kat_oran             ███                            3.1%  📊 Floor Ratio
+Yaşam_endeksi        ████████████████████████████  30.6%  🏘️ Living Index
+Banyo_Sayısı         █████████████████████         21.8%  🚿 Bathrooms
+İlçe_Mahalle_target  ████████                       8.4%  📍 Location
+Nüfus                ███████                        6.9%  👥 Population
+Net_Metrekare        ██████                         6.6%  📐 Area (m²)
+Oda_Sayısı           █████                          4.4%  🚪 Rooms
+Binanın_Kat_Sayısı   ████                           3.8%  🏗️ Total Floors
+kat_oran             ███                            2.2%  📊 Floor Ratio
 ```
 
-> 🔑 **Top 3 price determinants:** Location, Living Index, and Size account for over **61%** of the prediction power.
+> 🔑 **Top 3 price determinants:** Living Index, Bathrooms, and Location account for over **66%** of the prediction power.
 
 ---
 
@@ -102,7 +102,7 @@ kat_oran             ███                            3.1%  📊 Floor Ratio
 | `Yaşam_endeksi` | Living index score | Numeric |
 | `Nüfus` | Area population (thousands) | Numeric |
 | `kat_oran` | Floor ratio (engineered) | Numeric |
-| `İlçe_Mahalle_target` | Target encoded location (engineered) | Numeric |
+| `İlçe_Mahalle_target` | Target encoded location with smoothing (engineered) | Numeric |
 | **`Fiyatı`** | **Property price (TRY) — Target** | **Numeric** |
 
 ---
@@ -122,14 +122,14 @@ kat_oran             ███                            3.1%  📊 Floor Ratio
     │
     ├── 4️⃣  Feature Engineering
     │       ├── kat_oran = floor / total_floors
-    │       └── İlçe_Mahalle_target (Target Encoding)
+    │       └── İlçe_Mahalle_target (Target Encoding + Smoothing, m=15)
     │
     ├── 5️⃣  Outlier Removal (price > 50M, floor > building floors)
     │
     └── 6️⃣  Log Transform target variable (np.log1p)
             │
             ▼
-📊 Clean Data (16 features, ~2919 rows) → 🤖 Random Forest Model
+📊 Clean Data (16 features, ~2919 rows) → 🤖 XGBoost Model
 ```
 
 ---
@@ -137,13 +137,15 @@ kat_oran             ███                            3.1%  📊 Floor Ratio
 ## 🤖 Model Configuration
 
 ```python
-RandomForestRegressor(
-    n_estimators=300,       # 🌲 Number of trees
-    random_state=42,        # 🎲 Reproducibility
-    oob_score=True,         # 📊 Out-of-bag evaluation
-    max_depth=25,           # 📏 Max tree depth
-    min_samples_leaf=2,     # 🍃 Min samples per leaf
-    max_features="sqrt"     # 🔢 Features per split
+XGBRegressor(
+    n_estimators=500,       # 🌲 Number of trees
+    learning_rate=0.01,     # 📉 Step size shrinkage
+    max_depth=6,            # 📏 Max tree depth
+    min_child_weight=5,     # 🍃 Min sum of instance weight
+    subsample=0.7,          # 🎲 Row sampling ratio
+    colsample_bytree=0.8,   # 🔢 Feature sampling ratio
+    gamma=0.3,              # ✂️ Min loss reduction to split
+    random_state=42         # 🎲 Reproducibility
 )
 ```
 
@@ -171,7 +173,7 @@ git clone https://github.com/AloneMask001/EV-Fiyat-Tahmini.git
 cd EV-Fiyat-Tahmini
 
 # 2. Install dependencies
-pip install numpy pandas matplotlib scikit-learn jupyter
+pip install numpy pandas matplotlib scikit-learn xgboost jupyter
 
 # 3. Run the notebook
 jupyter notebook EV_tahmini.ipynb
